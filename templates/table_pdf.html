@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pdf_title }}</title>
+    <style>
+        body {
+            font-family: 'Arial Unicode MS', 'Traditional Arabic', Arial, sans-serif;
+            font-size: 10pt;
+        }
+        h1 {
+            text-align: center;
+            font-size: 14pt;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #e6e6e6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 8pt;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ pdf_title }}</h1>
+        <div>تاريخ التقرير: {{ now }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr {% if row.BUILDING_NAME == 'الإجمالى' %}class="total-row"{% endif %}>
+                {% for col in columns %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        تم إنشاء التقرير بواسطة نظام نوزوم - {{ timestamp }}
+    </div>
+</body>
+</html>

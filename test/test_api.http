@@ -1,0 +1,3 @@
+### Get nesba data
+GET http://localhost:2041/nesba
+Accept: application/json

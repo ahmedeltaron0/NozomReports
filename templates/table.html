@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نسبة الاشغال</title>
+
+    <style>
+        body{font-family:Arial,sans-serif;margin:20px;text-align:center;}
+        h1{margin-bottom:20px;font-size:24px;color:#333;}
+
+        table{width:95%;margin:0 auto;border-collapse:collapse;direction:rtl;}
+        th,td{border:1px solid #ccc;padding:8px;text-align:center;}
+        thead th{background:#d9edf7;font-weight:bold;color:#333;}
+
+        tbody tr:nth-child(even){background:#f9f9f9;}
+        tbody tr:nth-child(odd) {background:#fff;}
+
+        /* عمودا الاسم ومجموع الطاقة */
+        [data-col-name="BUILDING_NAME"]{background:#f2dede;color:#333;}
+        [data-col-name="TOTAL_SUM"]     {background:#dff0d8;}
+
+        /* أعمدة إقامة / رعاية التقليدية */
+        [data-col-name$="_EGAMA"],
+        [data-col-name="إقامة"],
+        [data-col-name="اقامة"]{background:#fff0b3;}
+
+        [data-col-name$="_RAYAA"],
+        [data-col-name="رعاية"],
+        [data-col-name="رعايه"]{background:#d0f0c0;}
+
+        /* صفّ الإجمالى */
+        .total-row td{font-weight:bold;background:#fbeed5;}
+
+        /* ─── التلوين الرمادى للأعمدة المطلوبة سابقًا ─── */
+        [data-col-name="BED_WRK1_CNT"],
+        [data-col-name="BED_WRK2_CNT"],
+        [data-col-name="BEDS_OCC_EGAMA"],
+        [data-col-name="BEDS_OCC_RAYAA"],
+        [data-col-name="BEDS_CNT"],
+        th[data-col-name="BED_WRK1_CNT"],
+        th[data-col-name="BED_WRK2_CNT"],
+        th[data-col-name="BEDS_OCC_EGAMA"],
+        th[data-col-name="BEDS_OCC_RAYAA"],
+        th[data-col-name="BEDS_CNT"]{background:#eeeeee !important;}
+
+        /* ─── تلوين أعمدة نسبة الاشغال بنفس لون صفّ الإجمالى ─── */
+        [data-col-name="BED_RAT1"],
+        [data-col-name="BED_RAT2"],
+        [data-col-name="BED_RAT_TOTAL"],
+        th[data-col-name="BED_RAT1"],
+        th[data-col-name="BED_RAT2"],
+        th[data-col-name="BED_RAT_TOTAL"]{background:#fbeed5 !important;}
+    </style>
+</head>
+<body>
+    <h1>جدول البيانات</h1>
+
+    <table>
+        <thead>
+            <!-- الصف الأول لعناوين المجموعات -->
+            <tr>
+                <th rowspan="2" data-col-name="BUILDING_NAME">مستشفى</th>
+                <th rowspan="2" data-col-name="TOTAL_SUM">طاقة الأسرة</th>
+
+                <th colspan="2">اجمالى الاسرة المخزنة</th>
+                <th colspan="2">اجمالى الاسرة العاملة</th>
+                <th colspan="2">ظباط</th>
+                <th colspan="2">درجات</th>
+                <th colspan="2">عامل مدنى</th>
+                <th colspan="2">عائلات ظباط</th>
+                <th colspan="2">عائلات درجات</th>
+                <th colspan="2">مدنيين</th>
+                <th colspan="2">مرافقين</th>
+
+                <!-- الأسرة المشغولة -->
+                <th colspan="3">اجمالى الاسرة المشغولة</th>
+
+                <!-- نسب الإشغال -->
+                <th colspan="3">نسبة الاشغال</th>
+
+                {% for col in columns[29:] %}
+                    <th rowspan="2" data-col-name="{{ col }}">{{ col }}</th>
+                {% endfor %}
+            </tr>
+
+            <!-- الصف الثانى للعناوين الفرعية -->
+            <tr>
+                {% set pair_groups = 9 %}
+                {% for _ in range(pair_groups) %}
+                    <th>إقامة</th><th>رعاية</th>
+                {% endfor %}
+
+                <!-- الأسرة المشغولة -->
+                <th>إقامة</th><th>رعاية</th><th>اجمالى</th>
+
+                <!-- نسب الإشغال -->
+                <th>إقامة</th><th>رعاية</th><th>اجمالى</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in rows %}
+            <tr class="{% if loop.last %}total-row{% endif %}">
+                {% for col in columns %}
+                    <td data-col-name="{{ col }}">{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
